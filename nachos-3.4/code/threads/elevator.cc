@@ -14,7 +14,8 @@ void ELEVATOR::start() {
     while(1) {
 
         // A. Wait until hailed
-        noPerson->Wait(elevatorLock);
+        //noPerson->Wait(elevatorLock);
+        //printf("waiting...\n");
 
         while(e->occupancy){
             //0. Acquire elevatorLock
@@ -92,7 +93,7 @@ void ELEVATOR::hailElevator(Person *p) {
     // 1. Increment waiting persons atFloor
     e->personsWaiting[currentFloor-1] = e->personsWaiting[currentFloor-1]+1;
     // 2. Hail Elevator
-    noPerson->Signal(elevatorLock);
+    //noPerson->Signal(elevatorLock);
     // 2.5 Acquire elevatorLock;
     e->elevatorLock->Acquire();
     // 3. Wait for elevator to arrive atFloor [entering[p->atFloor]->wait(elevatorLock)]
