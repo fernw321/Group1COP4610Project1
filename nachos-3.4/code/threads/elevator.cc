@@ -7,10 +7,6 @@ int nextPersonID = 1;
 Lock *personIDLock = new Lock("PersonIDLock");
 
 Condition *noPerson = new Condition("no one waiting");
-Condition *floor1 = new Condition("floor1");
-Condition *floor2 = new Condition("floor2");
-
-
 
 ELEVATOR *e;
 
@@ -46,10 +42,11 @@ void ELEVATOR::start() {
             //4. Go to next floor
             //need to figure out a decent way to tell elevator where to go next, cant just keep going one way until empty
 
+            printf("Elevator arrives on floor %d", e->currentFloor-1);
            
         }
 
-        printf("Elevator arrives on floor %d", e->currentFloor-1);
+        
     }
 }
 
