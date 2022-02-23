@@ -188,7 +188,7 @@ void Condition::Wait(Lock* conditionLock)
   // Disable interrupts (same as for Semaphores or Locks)
   IntStatus oldLevel = interrupt->SetLevel(IntOff);
 
-  ASSERT(conditionLock->isHeldByCurrentThread());
+
   
   if(!conditionLock->isHeldByCurrentThread()) {
         // ***** Do nothing *****
