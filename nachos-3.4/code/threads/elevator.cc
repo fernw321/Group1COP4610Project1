@@ -11,67 +11,71 @@ Condition *noPerson = new Condition("no one waiting");
 ELEVATOR *e;
 
 void ELEVATOR::start() {
-    printf("all the snakes...\n");
-    noPerson->Wait(elevatorLock);
-    for(int j =0 ; j< 1000000; j++) 
-    {
-            currentThread->Yield();
-    }
-    printf("are dead!\n");
-    // while(1) {
-
-        
-
-    //     // A. Wait until hailed
-    //     //noPerson->Wait(elevatorLock);
-    //     //printf("waiting...\n");
-
-    //     //check if anyone is waiting
-    //     // for(int i = 0; i < e->numFloors; i++)
-    //     // {
-    //     //     printf("we are here...\n");
-    //     //     if(personsWaiting[i] > 0)
-    //     //     {
-    //     //         e->waiting = true;
-    //     //         break;
-    //     //     }
-    //     // }
-
-    //     //B. While there are active persons, loop doing the following
-    //     //while(e->occupancy > 0 || e->waiting){
-    //         //0. Acquire elevatorLock
-    //         //e->elevatorLock->Acquire();
-
-    //         //1. Signal persons inside elevator to get off (leaving->broadcast(elevatorLock))
-    //         //leaving[currentFloor-1]->Broadcast(elevatorLock);
-
-    //         //2. Signal persons atFloor to get in, one at a time, checking occupancyLimit each time
-    //         // for(int i = 0; i < personsWaiting[currentFloor-1]; i++)
-    //         // {
-    //         //     if(e->occupancy == maxOccupancy)
-    //         //         break;
-    //         //     //need to establish signals
-    //         //     entering[currentFloor-1]->Signal(e->elevatorLock);
-    //         // }
-    //         //2.5 Release elevatorLock
-    //         //e->elevatorLock->Release();
-
-
-    //         //3. Spin for some time
-    //         for(int j =0 ; j< 1000000; j++) 
-    //         {
-    //                 currentThread->Yield();
-    //         }
-    //         //4. Go to next floor
-    //         //need to figure out a decent way to tell elevator where to go next, cant just keep going one way until empty
-    //         //e->currentFloor = e->currentFloor+1;
-
-    //         //printf("Elevator arrives on floor %d", e->currentFloor);
-           
-    //     //}
-
-        
+    // printf("all the snakes...\n");
+    // noPerson->Wait(elevatorLock);
+    // for(int j =0 ; j< 1000000; j++) 
+    // {
+    //         currentThread->Yield();
     // }
+    // printf("are dead!\n");
+
+    while(1) {
+        // A. Wait until hailed
+        noPerson->Wait(elevatorLock);
+        //printf("waiting...\n");
+
+        //check if anyone is waiting
+        e->elevatorLock->Acquire();
+        for(int i = 0; i < e->numFloors; i++)
+        { 
+            printf("we are here...\n");
+            if(e->personsWaiting[i] > 0)
+            {
+                printf("We got peeps: %d\n", e->personsWaiting[i]);
+                e->waiting = true;
+                if(e->waiting)
+                    printf("waiting\n");
+                break;
+            }
+        }
+
+        //B. While there are active persons, loop doing the following
+        while(e->occupancy > 0 || e->waiting){
+            // //0. Acquire elevatorLock
+            // e->elevatorLock->Acquire();
+            prinf("We are in...\n");
+            // //1. Signal persons inside elevator to get off (leaving->broadcast(elevatorLock))
+            // leaving[currentFloor-1]->Broadcast(elevatorLock);
+
+            // //2. Signal persons atFloor to get in, one at a time, checking occupancyLimit each time
+            // for(int i = 0; i < personsWaiting[currentFloor-1]; i++)
+            // {
+            //     if(e->occupancy == maxOccupancy)
+            //         break;
+            //     //need to establish signals
+            //     entering[currentFloor-1]->Signal(e->elevatorLock);
+            // }
+            // //2.5 Release elevatorLock
+            // e->elevatorLock->Release();
+
+
+            // //3. Spin for some time
+            // for(int j =0 ; j< 1000000; j++) 
+            // {
+            //         currentThread->Yield();
+            // }
+            //4. Go to next floor
+            //need to figure out a decent way to tell elevator where to go next, cant just keep going one way until empty
+            e->currentFloor = e->currentFloor+1;
+
+            printf("Elevator arrives on floor %d", e->currentFloor);
+           
+        }
+
+        e->elevatorLock->Release();
+
+        
+    }
 }
 
 void ElevatorThread(int numFloors) {
@@ -116,7 +120,8 @@ void Elevator(int numFloors) {
 
 void ELEVATOR::hailElevator(Person *p) {
     // 1. Increment waiting persons atFloor
-    //e->personsWaiting[currentFloor-1] = e->personsWaiting[currentFloor-1]+1;
+    e->personsWaiting[e->currentFloor-1] = e->personsWaiting[e->currentFloor-1]+1;
+    printf("People waiting: %d\n", e->personsWaiting[e->currentFloor-1]);
     // 2. Hail Elevator
     noPerson->Signal(elevatorLock);
     // 2.5 Acquire elevatorLock;
