@@ -25,7 +25,7 @@ void ELEVATOR::start() {
         //printf("waiting...\n");
 
         //check if anyone is waiting
-        e->elevatorLock->Acquire();
+       
         for(int i = 0; i < e->numFloors; i++)
         { 
             printf("we are here...\n");
@@ -72,7 +72,7 @@ void ELEVATOR::start() {
            
         }
 
-        e->elevatorLock->Release();
+        //e->elevatorLock->Release();
 
         
     }
