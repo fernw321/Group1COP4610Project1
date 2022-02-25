@@ -94,7 +94,7 @@ void ElevatorThread(int numFloors) {
 
 }
 
-ELEVATOR::GetNumFloors()
+int GetNumFloors()
 {
     return numFloors;
 }
