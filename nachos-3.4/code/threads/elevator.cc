@@ -13,19 +13,21 @@ ELEVATOR *e;
 void ELEVATOR::start() {
     while(1) {
 
+        
+
+        // A. Wait until hailed
+        noPerson->Wait(elevatorLock);
+        //printf("waiting...\n");
+
         //check if anyone is waiting
         for(int i = 0; i < e->numFloors; i++)
         {
-            if(personsWaiting[i])
+            if(personsWaiting[i] > 0)
             {
                 e->waiting = true;
                 break;
             }
         }
-
-        // A. Wait until hailed
-        noPerson->Wait(elevatorLock);
-        //printf("waiting...\n");
 
         while(e->occupancy > 0 || e->waiting > 0){
             //0. Acquire elevatorLock
