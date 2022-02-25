@@ -13,15 +13,15 @@ ELEVATOR *e;
 void ELEVATOR::start() {
     // printf("all the snakes...\n");
     // noPerson->Wait(elevatorLock);
-    // for(int j =0 ; j< 1000000; j++) 
-    // {
-    //         currentThread->Yield();
-    // }
+// for(int j =0 ; j< 1000000; j++) 
+// {
+//         currentThread->Yield();
+// }
     // printf("are dead!\n");
 
     while(1) {
         // A. Wait until hailed
-        printf("waiting...\n");
+        //printf("waiting...\n");
 
         //check if anyone is waiting
         printf("floors: %d\n", e->numFloors);
@@ -82,6 +82,11 @@ void ElevatorThread(int numFloors) {
     printf("Elevator with %d floors was created!\n", numFloors);
 
     e = new ELEVATOR(numFloors);
+
+    for(int j =0 ; j< 1000000; j++) 
+    {
+        currentThread->Yield();
+    }
 
     e->start();
 
