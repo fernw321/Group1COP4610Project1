@@ -83,7 +83,7 @@ void ElevatorThread(int numFloors) {
 
     e = new ELEVATOR(numFloors);
 
-    printf("numfloors: %d\n", e->GetNumFloors);
+    printf("numfloors: %d\n", e->GetNumFloors());
     for(int j =0 ; j< 1000000; j++) 
     {
         currentThread->Yield();
