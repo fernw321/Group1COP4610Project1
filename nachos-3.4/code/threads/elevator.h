@@ -19,6 +19,7 @@ class ELEVATOR {
 public:
     ELEVATOR(int numFloors);
     ~ELEVATOR();
+    int GetNumFloors();
     void hailElevator(Person *p);
     void start();
 
