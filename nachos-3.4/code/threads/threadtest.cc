@@ -165,9 +165,18 @@ SimpleThread(int which)
 }
 
 
-#endif
+#elif defined(CHANGED) 
 
-#if defined(CHANGED) 
+void
+SimpleThread(int which)
+{
+    int num;
+    
+    for (num = 0; num < 5; num++) {
+    printf("*** thread %d looped %d times\n", which, num);
+        currentThread->Yield();
+    }
+}
 
 void
 ThreadTest(int n) {
@@ -184,7 +193,11 @@ ThreadTest(int n) {
     SimpleThread(0);
 }
 
-#else // end block for CHANGED, HW1_SEMAPHORES, and HW1_LOCKS
+
+
+#else
+
+
 
 void
 SimpleThread(int which)
@@ -231,6 +244,5 @@ ThreadTest()
 	break;
     }
 }
-
-#endif // end for no preprocessor variables
+#endif
 

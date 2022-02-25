@@ -122,7 +122,7 @@ main(int argc, char **argv)
     #elif defined(CHANGED)
     printf("CHANGED IN MAIN \n");
     // ThreadTest(2);
-    SemaphorePing();
+    // SemaphorePing();
     // LockTest();
     // Ping();
     #else
@@ -178,7 +178,7 @@ main(int argc, char **argv)
         if (!strcmp(*argv, "-o")) {
 	    ASSERT(argc > 1);
             Delay(2); 				// delay for 2 seconds
-						// to give the user time to 
+						// to give the user time to
 						// start up another nachos
             MailTest(atoi(*(argv + 1)));
             argCount = 2;
@@ -186,7 +186,7 @@ main(int argc, char **argv)
 #endif // NETWORK
     }
 
-    currentThread->Finish();	// NOTE: if the procedure "main" 
+    currentThread->Finish();	// NOTE: if the procedure "main"
 				// returns, then the program "nachos"
 				// will exit (as any other normal program
 				// would).  But there may be other
