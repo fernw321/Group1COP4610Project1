@@ -122,7 +122,7 @@ main(int argc, char **argv)
     #elif defined(CHANGED)
     printf("CHANGED IN MAIN \n");
     // ThreadTest(2);
-    // SemaphorePing();
+    SemaphorePing();
     // LockTest();
     // Ping();
     #else
