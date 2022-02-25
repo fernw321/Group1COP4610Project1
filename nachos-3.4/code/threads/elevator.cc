@@ -28,8 +28,9 @@ void ELEVATOR::start() {
                 break;
             }
         }
-
-        while(e->occupancy > 0 || e->waiting > 0){
+        
+        //B. While there are active persons, loop doing the following
+        while(e->occupancy > 0 || e->waiting){
             //0. Acquire elevatorLock
             e->elevatorLock->Acquire();
 
@@ -55,8 +56,9 @@ void ELEVATOR::start() {
             }
             //4. Go to next floor
             //need to figure out a decent way to tell elevator where to go next, cant just keep going one way until empty
+            e->currentFloor = e->currentFloor+1;
 
-            printf("Elevator arrives on floor %d", e->currentFloor-1);
+            printf("Elevator arrives on floor %d", e->currentFloor);
            
         }
 
