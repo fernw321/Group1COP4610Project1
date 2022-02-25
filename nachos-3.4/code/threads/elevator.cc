@@ -24,7 +24,7 @@ void ELEVATOR::start() {
         //printf("waiting...\n");
 
         //check if anyone is waiting
-        printf("floors: %d\n", e->numFloors);
+        //printf("floors: %d\n", e->numFloors);
         for(int i = 0; i < e->numFloors; i++)
         { 
             printf("we are here...\n");
@@ -83,6 +83,7 @@ void ElevatorThread(int numFloors) {
 
     e = new ELEVATOR(numFloors);
 
+    printf("numfloors: %d\n", e->numFloors);
     for(int j =0 ; j< 1000000; j++) 
     {
         currentThread->Yield();
