@@ -43,7 +43,7 @@ void ELEVATOR::start() {
         while(e->occupancy > 0 || e->waiting){
             // //0. Acquire elevatorLock
             // e->elevatorLock->Acquire();
-            prinf("We are in...\n");
+            printf("We are in...\n");
             // //1. Signal persons inside elevator to get off (leaving->broadcast(elevatorLock))
             // leaving[currentFloor-1]->Broadcast(elevatorLock);
 
