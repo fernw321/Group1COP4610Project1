@@ -21,10 +21,10 @@ void ELEVATOR::start() {
 
     while(1) {
         // A. Wait until hailed
-        //printf("waiting...\n");
+        printf("waiting...\n");
 
         //check if anyone is waiting
-       
+        printf("floors: %d\n", e->numFloors);
         for(int i = 0; i < e->numFloors; i++)
         { 
             printf("we are here...\n");
