@@ -2,7 +2,7 @@
 #include "system.h"
 #include "elevator.h"
 
-
+int numFloors = 0;
 int nextPersonID = 1;
 Lock *personIDLock = new Lock("PersonIDLock");
 
@@ -25,7 +25,7 @@ void ELEVATOR::start() {
 
         //check if anyone is waiting
         //printf("floors: %d\n", e->numFloors);
-        for(int i = 0; i < e->numFloors; i++)
+        for(int i = 0; i < numFloors; i++)
         { 
             printf("we are here...\n");
             if(e->personsWaiting[i] > 0)
@@ -79,24 +79,17 @@ void ELEVATOR::start() {
 
 void ElevatorThread(int numFloors) {
 
+    this.numFloors = numFloors;
     printf("Elevator with %d floors was created!\n", numFloors);
 
     e = new ELEVATOR(numFloors);
 
-    printf("numfloors: %d\n", e->GetNumFloors());
     for(int j =0 ; j< 1000000; j++) 
     {
         currentThread->Yield();
     }
 
     e->start();
-
-
-}
-
-int GetNumFloors()
-{
-    return numFloors;
 }
 
 ELEVATOR::ELEVATOR(int numFloors) {
