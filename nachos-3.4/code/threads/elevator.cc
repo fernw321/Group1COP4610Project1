@@ -13,11 +13,21 @@ ELEVATOR *e;
 void ELEVATOR::start() {
     while(1) {
 
+        //check if anyone is waiting
+        for(int i = 0; i < e->numFloors; i++)
+        {
+            if(personsWaiting[i])
+            {
+                e->waiting = true;
+                break;
+            }
+        }
+
         // A. Wait until hailed
         noPerson->Wait(elevatorLock);
         printf("waiting...\n");
 
-        while(e->personsWaiting[currentFloor-1] > 0){
+        while(e->occupancy || e->waiting){
             //0. Acquire elevatorLock
             e->elevatorLock->Acquire();
 
@@ -64,6 +74,7 @@ void ElevatorThread(int numFloors) {
 
 ELEVATOR::ELEVATOR(int numFloors) {
     currentFloor = 1;
+    numFloors = numFloors;
     entering = new Condition*[numFloors];
     // Initialize entering
     for (int i = 0; i < numFloors; i++) {

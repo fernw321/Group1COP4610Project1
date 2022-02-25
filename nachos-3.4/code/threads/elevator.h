@@ -30,6 +30,8 @@ private:
     int occupancy;
     int maxOccupancy;
     Lock *elevatorLock;
+    int numFloors;
+    bool waiting;
 
 };
 
