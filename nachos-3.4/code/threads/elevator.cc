@@ -79,7 +79,7 @@ void ELEVATOR::start() {
 
 void ElevatorThread(int numFloors) {
 
-    this.numFloors = numFloors;
+    numFloors = numFloors;
     printf("Elevator with %d floors was created!\n", numFloors);
 
     e = new ELEVATOR(numFloors);
