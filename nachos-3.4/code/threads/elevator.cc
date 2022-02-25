@@ -21,7 +21,6 @@ void ELEVATOR::start() {
 
     while(1) {
         // A. Wait until hailed
-        noPerson->Wait(elevatorLock);
         //printf("waiting...\n");
 
         //check if anyone is waiting
