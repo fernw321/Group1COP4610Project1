@@ -15,6 +15,7 @@ void ElevatorTest(int numFloors, int numPersons) {
             toFloor = (Random() % numFloors) + 1; // choose a random toFloor
         } while (atFloor == toFloor) ;
 
+        printf("test\n");
         ArrivingGoingFromTo(atFloor, toFloor);
 
         for(int j =0 ; j< 1000000; j++) {
