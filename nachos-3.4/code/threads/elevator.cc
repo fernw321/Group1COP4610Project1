@@ -25,9 +25,9 @@ void ELEVATOR::start() {
 
         // A. Wait until hailed
         noPerson->Wait(elevatorLock);
-        printf("waiting...\n");
+        //printf("waiting...\n");
 
-        while(e->occupancy || e->waiting){
+        while(e->occupancy > 0 || e->waiting > 0){
             //0. Acquire elevatorLock
             e->elevatorLock->Acquire();
 
@@ -47,9 +47,10 @@ void ELEVATOR::start() {
 
 
             //3. Spin for some time
-            for(int j =0 ; j< 1000000; j++) {
+            for(int j =0 ; j< 1000000; j++) 
+            {
                     currentThread->Yield();
-                }
+            }
             //4. Go to next floor
             //need to figure out a decent way to tell elevator where to go next, cant just keep going one way until empty
 
@@ -77,7 +78,8 @@ ELEVATOR::ELEVATOR(int numFloors) {
     numFloors = numFloors;
     entering = new Condition*[numFloors];
     // Initialize entering
-    for (int i = 0; i < numFloors; i++) {
+    for (int i = 0; i < numFloors; i++) 
+    {
         entering[i] = new Condition("Entering");
     }
     personsWaiting = new int[numFloors];
