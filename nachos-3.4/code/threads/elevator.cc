@@ -24,14 +24,17 @@ void ELEVATOR::start() {
 
     bool snake = true;
     currentThread->Yield();
-
-    while(1) {
-        // A. Wait until hailed
+    printf("elevator\n");
+        for(int i = 0; i<40;i++){
+            e->elevatorLock->Acquire();
+            printf("tigers\n");
+            e->elevatorLock->Release();
+        }
+    // while(1) {
+    //     // A. Wait until hailed
         //printf("waiting...\n");
 
-        e->elevatorLock->Acquire();
-        printf("snakes\n");
-        e->elevatorLock->Release();
+        
 
         //check if anyone is waiting
         //printf("floors: %d\n", e->numFloors);
@@ -72,7 +75,7 @@ void ELEVATOR::start() {
         //e->elevatorLock->Release();
 
         
-    }
+    //}
 }
 
 //TODO: remove!!!!!
@@ -126,9 +129,14 @@ void ELEVATOR::hailElevator(Person *p) {
     e->personsWaiting[e->currentFloor-1] = e->personsWaiting[e->currentFloor-1]+1;
     //printf("People waiting: %d\n", e->personsWaiting[e->currentFloor-1]);
     // 2. Hail Elevator
-    e->elevatorLock->Acquire();
-    printf("snakes\n");
-    e->elevatorLock->Release();
+
+    for(int i = 0; i<40;i++){
+        printf("rats\n");
+        e->elevatorLock->Acquire();
+        printf("dogs\n");
+        e->elevatorLock->Release();
+    }
+    
     // noPerson->Signal(elevatorLock);
     // 2.5 Acquire elevatorLock;
     //e->elevatorLock->Acquire();
