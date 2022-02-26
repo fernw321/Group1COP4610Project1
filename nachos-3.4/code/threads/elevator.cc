@@ -130,12 +130,14 @@ void ELEVATOR::hailElevator(Person *p) {
     //printf("People waiting: %d\n", e->personsWaiting[e->currentFloor-1]);
     // 2. Hail Elevator
 
-    for(int i = 0; i<40;i++){
+    e->elevatorLock->Acquire();
+    for(int i = 0; i<2;i++){
         printf("rats\n");
-        e->elevatorLock->Acquire();
+        
         printf("dogs\n");
-        e->elevatorLock->Release();
+        
     }
+    e->elevatorLock->Release();
     
     // noPerson->Signal(elevatorLock);
     // 2.5 Acquire elevatorLock;
