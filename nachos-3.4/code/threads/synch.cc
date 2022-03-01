@@ -219,7 +219,7 @@ void Condition::Signal(Lock* conditionLock)
   //Disable interrupts (same as Semaphores and Locks)
   IntStatus oldLevel = interrupt->SetLevel(IntOff);  // disable interrupts
 
-  //ASSERT(conditionLock->isHeldByCurrentThread());
+
 
   //If the conditional locks is not held by the current thread, do nothing
   if(!conditionLock->isHeldByCurrentThread())
