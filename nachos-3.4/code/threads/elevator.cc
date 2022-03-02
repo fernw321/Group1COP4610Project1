@@ -13,19 +13,9 @@ ELEVATOR *e;
 void ELEVATOR::start() {
     while(1) {
 
-        // //check if anyone is waiting
-        // for(int i = 0; i < e->numFloors; i++)
-        // {
-        //     if(personsWaiting[i])
-        //     {
-        //         e->waiting = true;
-        //         break;
-        //     }
-        // }
-
         // A. Wait until hailed
         waiting_cd->Wait(e->elevatorLock);
-        e->elevatorLock->Acquire();
+        //e->elevatorLock->Acquire();
         printf("waiting...\n");
         if(e->waiting)
             printf("shouldnt be waiting...");
@@ -44,7 +34,7 @@ void ELEVATOR::start() {
                 if(e->occupancy == e->maxOccupancy)
                     break;
 
-                entering[currentFloor-1]->Signal(e->elevatorLock);
+                entering[e->currentFloor-1]->Signal(e->elevatorLock);
             }
             //2.5 Release elevatorLock
             e->elevatorLock->Release();
@@ -106,23 +96,30 @@ void Elevator(int numFloors) {
 
 
 void ELEVATOR::hailElevator(Person *p) {
+    e->elevatorLock->Acquire();
     // 1. Increment waiting persons atFloor
     e->personsWaiting[e->currentFloor-1] = e->personsWaiting[e->currentFloor-1]+1;
     // 2. Hail Elevator
     waiting_cd->Signal(e->elevatorLock);
     e->waiting = true;
     // 2.5 Acquire elevatorLock;
-    e->elevatorLock->Acquire();
+    e->elevatorLock->Release();
+    
     // 3. Wait for elevator to arrive atFloor [entering[p->atFloor]->wait(elevatorLock)]
-    entering[p->atFloor-1]->Wait(e->elevatorLock);   
+    entering[p->atFloor-1]->Wait(e->elevatorLock);
+
+    e->elevatorLock->Acquire();
     
     printf("Person %d got into the elevator.\n", p->id);
     // 6. Decrement persons waiting atFloor [personsWaiting[atFloor]++]
     e->personsWaiting[e->currentFloor-1] = e->personsWaiting[e->currentFloor-1]-1;
     // 7. Increment persons inside elevator [occupancy++]
     e->occupancy = e->occupancy + 1;
+    e->elevatorLock->Release();
     // 8. Wait for elevator to reach toFloor [leaving[p->toFloor]->wait(elevatorLock)]
     leaving[p->toFloor-1]->Wait(e->elevatorLock);
+
+    e->elevatorLock->Acquire();
 
     // 9. Get out of the elevator
     printf("Person %d got out of the elevator.\n", p->id);
