@@ -6,7 +6,7 @@
 int nextPersonID = 1;
 Lock *personIDLock = new Lock("PersonIDLock");
 
-Condition *noPerson = new Condition("no one waiting");
+Condition *waiting_cd = new Condition("no one waiting");
 
 ELEVATOR *e;
 
@@ -24,7 +24,7 @@ void ELEVATOR::start() {
         // }
 
         // A. Wait until hailed
-        noPerson->Wait(elevatorLock);
+        waiting_cd->Wait(e->elevatorLock);
         e->elevatorLock->Acquire();
         printf("waiting...\n");
         if(e->waiting)
@@ -35,11 +35,12 @@ void ELEVATOR::start() {
             e->elevatorLock->Acquire();
 
             //1. Signal persons inside elevator to get off (leaving->broadcast(elevatorLock))
-            leaving[currentFloor-1]->Broadcast(elevatorLock);
+            leaving[e->currentFloor-1]->Broadcast(e->elevatorLock);
 
             //2. Signal persons atFloor to get in, one at a time, checking occupancyLimit each time
-            for(int i = 0; i < personsWaiting[currentFloor-1]; i++)
+            for(int i = 0; i < e->personsWaiting[currentFloor-1]; i++)
             {
+                printf("Person waiting to enter...\n");
                 if(e->occupancy == e->maxOccupancy)
                     break;
 
@@ -57,7 +58,7 @@ void ELEVATOR::start() {
             //need to figure out a decent way to tell elevator where to go next, cant just keep going one way until empty
             e->currentFloor = e->currentFloor+1;
 
-            printf("Elevator arrives on floor %d", e->currentFloor-1);
+            printf("Elevator arrives on floor %d\n", e->currentFloor-1);
            
         }
 
@@ -106,9 +107,9 @@ void Elevator(int numFloors) {
 
 void ELEVATOR::hailElevator(Person *p) {
     // 1. Increment waiting persons atFloor
-    e->personsWaiting[currentFloor-1] = e->personsWaiting[currentFloor-1]+1;
+    e->personsWaiting[e->currentFloor-1] = e->personsWaiting[e->currentFloor-1]+1;
     // 2. Hail Elevator
-    noPerson->Signal(elevatorLock);
+    waiting_cd->Signal(e->elevatorLock);
     e->waiting = true;
     // 2.5 Acquire elevatorLock;
     e->elevatorLock->Acquire();
@@ -117,7 +118,7 @@ void ELEVATOR::hailElevator(Person *p) {
     
     printf("Person %d got into the elevator.\n", p->id);
     // 6. Decrement persons waiting atFloor [personsWaiting[atFloor]++]
-    e->personsWaiting[currentFloor-1] = e->personsWaiting[currentFloor-1]-1;
+    e->personsWaiting[e->currentFloor-1] = e->personsWaiting[e->currentFloor-1]-1;
     // 7. Increment persons inside elevator [occupancy++]
     e->occupancy = e->occupancy + 1;
     // 8. Wait for elevator to reach toFloor [leaving[p->toFloor]->wait(elevatorLock)]
