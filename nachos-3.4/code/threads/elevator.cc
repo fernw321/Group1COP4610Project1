@@ -25,9 +25,12 @@ void ELEVATOR::start() {
 
         // A. Wait until hailed
         noPerson->Wait(elevatorLock);
+        e->elevatorLock->Acquire();
         printf("waiting...\n");
+        if(e->waiting)
+            printf("shouldnt be waiting...");
 
-        while(e->occupancy || e->waiting){
+        while(1){
             //0. Acquire elevatorLock
             e->elevatorLock->Acquire();
 
@@ -37,9 +40,9 @@ void ELEVATOR::start() {
             //2. Signal persons atFloor to get in, one at a time, checking occupancyLimit each time
             for(int i = 0; i < personsWaiting[currentFloor-1]; i++)
             {
-                if(e->occupancy == maxOccupancy)
+                if(e->occupancy == e->maxOccupancy)
                     break;
-                //need to establish signals
+
                 entering[currentFloor-1]->Signal(e->elevatorLock);
             }
             //2.5 Release elevatorLock
@@ -52,6 +55,7 @@ void ELEVATOR::start() {
                 }
             //4. Go to next floor
             //need to figure out a decent way to tell elevator where to go next, cant just keep going one way until empty
+            e->currentFloor = e->currentFloor+1;
 
             printf("Elevator arrives on floor %d", e->currentFloor-1);
            
@@ -104,8 +108,8 @@ void ELEVATOR::hailElevator(Person *p) {
     // 1. Increment waiting persons atFloor
     e->personsWaiting[currentFloor-1] = e->personsWaiting[currentFloor-1]+1;
     // 2. Hail Elevator
-    e->waiting = true;
     noPerson->Signal(elevatorLock);
+    e->waiting = true;
     // 2.5 Acquire elevatorLock;
     e->elevatorLock->Acquire();
     // 3. Wait for elevator to arrive atFloor [entering[p->atFloor]->wait(elevatorLock)]
