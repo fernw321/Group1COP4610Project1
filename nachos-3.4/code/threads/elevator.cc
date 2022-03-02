@@ -14,6 +14,7 @@ void ELEVATOR::start() {
     while(1) {
 
         // A. Wait until hailed
+        e->elevatorLock->Acquire();
         waiting_cd->Wait(e->elevatorLock);
         //e->elevatorLock->Acquire();
         printf("waiting...\n");
@@ -28,6 +29,7 @@ void ELEVATOR::start() {
             leaving[e->currentFloor-1]->Broadcast(e->elevatorLock);
 
             //2. Signal persons atFloor to get in, one at a time, checking occupancyLimit each time
+            printf("persons waiting: %d\n", e->personsWaiting[e->currentFloor-1]);
             for(int i = 0; i < e->personsWaiting[currentFloor-1]; i++)
             {
                 printf("Person waiting to enter...\n");
@@ -100,6 +102,7 @@ void ELEVATOR::hailElevator(Person *p) {
     // 1. Increment waiting persons atFloor
     e->personsWaiting[e->currentFloor-1] = e->personsWaiting[e->currentFloor-1]+1;
     // 2. Hail Elevator
+    printf("stop waiting...\n");
     waiting_cd->Signal(e->elevatorLock);
     e->waiting = true;
     // 2.5 Acquire elevatorLock;
