@@ -32,6 +32,7 @@ private:
     Lock *elevatorLock;
     int numFloors;
     bool waiting;
+    bool direction = true; //up direction
 
 };
 
