@@ -80,7 +80,7 @@ void ElevatorThread(int numFloors) {
 ELEVATOR::ELEVATOR(int numFloors) {
     currentFloor = 1;
     numFloors = numFloors;
-    numPersonsWaiting = 0
+    numPersonsWaiting = 0;
     direction = 1; //up
     entering = new Condition*[numFloors];
     // Initialize entering
