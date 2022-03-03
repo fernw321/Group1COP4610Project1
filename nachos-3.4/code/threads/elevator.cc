@@ -14,9 +14,9 @@ void ELEVATOR::start() {
     while(1) {
 
         // A. Wait until hailed
-        //e->elevatorLock->Acquire();
+        e->elevatorLock->Acquire();
         
-        while(!numPersons)
+        while(!e->numPersonsWaiting)
         {
             waiting_cd->Wait(e->elevatorLock);
         }
@@ -80,6 +80,8 @@ void ElevatorThread(int numFloors) {
 ELEVATOR::ELEVATOR(int numFloors) {
     currentFloor = 1;
     numFloors = numFloors;
+    numPersonsWaiting = 0
+    direction = 1; //up
     entering = new Condition*[numFloors];
     // Initialize entering
     for (int i = 0; i < numFloors; i++) {
@@ -109,6 +111,7 @@ void ELEVATOR::hailElevator(Person *p) {
     e->elevatorLock->Acquire();
     // 1. Increment waiting persons atFloor
     //if(e->elevatorLock->isHeldByCurrentThread())
+    e->numPersonsWaiting++;
     e->personsWaiting[e->currentFloor-1] = e->personsWaiting[e->currentFloor-1]+1;
     // 2. Hail Elevator
     printf("stop waiting...\n");
@@ -126,6 +129,7 @@ void ELEVATOR::hailElevator(Person *p) {
     printf("Person %d got into the elevator.\n", p->id);
     // 6. Decrement persons waiting atFloor [personsWaiting[atFloor]++]
     e->personsWaiting[e->currentFloor-1] = e->personsWaiting[e->currentFloor-1]-1;
+    e->numPersonsWaiting--;
     // 7. Increment persons inside elevator [occupancy++]
     e->occupancy = e->occupancy + 1;
     //e->elevatorLock->Release();
