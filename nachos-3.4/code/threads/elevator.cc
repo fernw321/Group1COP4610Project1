@@ -16,7 +16,7 @@ void ELEVATOR::start() {
         // A. Wait until hailed
         e->elevatorLock->Acquire();
         
-        while(e->numPersonsWaiting < 1 && e->occupancy < 1)
+        if(e->numPersonsWaiting < 1 && e->occupancy < 1)
         {
             waiting_cd->Wait(e->elevatorLock);
         }
@@ -123,7 +123,7 @@ void ELEVATOR::hailElevator(Person *p) {
     // 2.5 Acquire elevatorLock;
     
     // 3. Wait for elevator to arrive atFloor [entering[p->atFloor]->wait(elevatorLock)]
-    while(e->currentFloor != p->atFloor)
+    if(e->currentFloor != p->atFloor)
         entering[p->atFloor-1]->Wait(e->elevatorLock);
 
 
@@ -142,7 +142,7 @@ void ELEVATOR::hailElevator(Person *p) {
     //e->elevatorLock->Release();
     // 8. Wait for elevator to reach toFloor [leaving[p->toFloor]->wait(elevatorLock)]
     //put condition
-    while(e->currentFloor != p->toFloor)
+    if(e->currentFloor != p->toFloor)
         leaving[p->toFloor-1]->Wait(e->elevatorLock);
 
     //e->elevatorLock->Acquire();
@@ -180,7 +180,7 @@ int getNextPersonID() {
 
 void ArrivingGoingFromTo(int atFloor, int toFloor) {
 
-	printf("Person wants to go from floor %d to %d\n", atFloor, toFloor);
+	//printf("Person wants to go from floor %d to %d\n", atFloor, toFloor);
     // Create Person struct
     Person *p = new Person;
     p->id = getNextPersonID();
