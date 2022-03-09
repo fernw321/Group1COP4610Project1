@@ -121,7 +121,7 @@ main(int argc, char **argv)
     ElevatorTest(5,5);
     #elif defined(CHANGED)
     printf("CHANGED IN MAIN \n");
-    // ThreadTest(2);
+    ThreadTest(2);
     // SemaphorePing();
     // LockTest();
     // Ping();

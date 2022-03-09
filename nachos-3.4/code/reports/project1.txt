@@ -1,0 +1,25 @@
+Project 1 Report
+COP 4610 Group 1
+Miguel Pacillo
+William Fernandez
+Sean Hentschel
+
+Exercise 1:
+Fully functional and passes SemaphorePing() test, define CHANGED and HW1_SEMAPHORES to test SimpleThread with semaphore implementation.
+
+Exercise 2:
+Fully functional and passes LockTest() test, define CHANGED and HW1_LOCKS to test SimpleThread with locks implementation.
+
+Exercise 3:
+Fully functional and passes Ping() test.
+
+Exercise 4:
+Exercise 4 has partially been completed. The elevator program will create Persons threads and populate the personsWaiting array (array to tell the elevator how many people are waiting on each floor) and the entering array (array to determine the queue of people who are going to get on the elevator at each floor) successfully. The elevator is also successfully being created with correct data. Elevator also successfully waits to be hailed and is hailed by Person threads. It does not pass the tests and fails to successfully perform its function in any form. The issue seems to be that all the running threads reach deadlock, thus the program terminates before being able to successfully simulate a passenger getting on the elevator. We seem to have inefficient logic regarding our condition variables. It was designed to check the state of specific variables of the elevator lock before proceeding to running thread operations. This might be leading to corrupt data and possible illogical condition checks that could not be properly resolved by the team. With these issues present, the synchronization between Person threads and the Elevator thread was not achieved, thus the deadlock.
+
+Member Responsibilities:
+
+Miguel Pacillo: Worked on implementing SimpleThread() for Exercises 1 and 2. Fixed bugs regarding preprocessor conditionals and restructured ThreadTest.cc. Implemented testing procedures for Exercises 1, 2, and 3 and verified code functionality.
+
+William Fernandez: Set up the code repository for the project. Worked on the implementations of Exercises 1, 2, and 3. Resolved some preprocessor conditional issues and debugged Makefile errors. Helped Sean implement exercise 4.
+
+Sean Hentschel: Worked on the implementation of part 4’s hailElevator(), ELEVATOR::start() and ElevatorThread() functions. Structured and designed the logic for this part of the project as well. This part was partially completed and the debugging was handled by me.

@@ -29,7 +29,7 @@ int testnum = 1;
 //	purposes.
 //----------------------------------------------------------------------
 
-#if defined(CHANGED) && defined(HW1_SEMAPHORES)
+#if defined(HW1_SEMAPHORES)
 
 // EXERCISE 1: SimpleThread implementation with Semaphores
 
@@ -96,7 +96,22 @@ SimpleThread(int which)
 
 }
 
-#elif defined(CHANGED) && defined(HW1_LOCKS)
+void
+ThreadTest(int n) {
+    DEBUG('t', "Entering SimpleTest");
+    Thread *t;
+    numThreadsActive = n;
+    printf("NumthreadsActive = %d\n", numThreadsActive);
+
+    for(int i=1; i<n; i++)
+    {
+        t = new Thread("forked thread");
+        t->Fork(SimpleThread,i);
+    }
+    SimpleThread(0);
+}
+
+#elif defined(HW1_LOCKS)
 
 // EXERCISE 2: SimpleThread Implementation with Locks
 
@@ -164,8 +179,22 @@ SimpleThread(int which)
 
 }
 
+void
+ThreadTest(int n) {
+    DEBUG('t', "Entering SimpleTest");
+    Thread *t;
+    numThreadsActive = n;
+    printf("NumthreadsActive = %d\n", numThreadsActive);
 
-#elif defined(CHANGED) 
+    for(int i=1; i<n; i++)
+    {
+        t = new Thread("forked thread");
+        t->Fork(SimpleThread,i);
+    }
+    SimpleThread(0);
+}
+
+#elif defined(CHANGED)
 
 void
 SimpleThread(int which)
@@ -193,11 +222,7 @@ ThreadTest(int n) {
     SimpleThread(0);
 }
 
-
-
 #else
-
-
 
 void
 SimpleThread(int which)
