@@ -5,7 +5,7 @@
 #include "bitmap.h"
 class MemoryManager {
     public:
-        MemoryManager (int numTotalPages);
+        MemoryManager ();
         ~MemoryManager ();
         int AllocatePage();
         int DealloatePage(int which);
