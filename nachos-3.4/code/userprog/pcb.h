@@ -1,6 +1,12 @@
 #ifndef PCB_H
 #define PCB_H
 
+#include "thread.h"
+#include "bitmap.h"
+#include "list.h"
+
+class Thread;
+
 class PCB {
     public:
         PCB(int id);
@@ -13,6 +19,6 @@ class PCB {
     private:
         void AddChild(PCB* pcb);
         int RemoveChild(PCB* pcb);
-}
+};
 
 #endif // PCB_H

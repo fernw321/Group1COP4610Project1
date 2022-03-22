@@ -15,9 +15,9 @@ int MemoryManager::AllocatePage() {
 }
 
 int MemoryManager::DealloatePage(int which) {
-	if (bitMap->Test(which) == false) return -1;
+	if (bitmap->Test(which) == false) return -1;
 	else {
-		bitMap->Clear(which);
+		bitmap->Clear(which);
 		return 0;
 	}
 }

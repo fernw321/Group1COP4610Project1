@@ -48,7 +48,11 @@
 //	are in machine.h.
 //----------------------------------------------------------------------
 
-void doExit() {
+void doExit(int status) {
+
+    int pid = 99;
+    printf("System call [%d] invoked [Exit]\n", pid);
+    printf("Process [%d] exits with [%d]\n", pid, status);
     delete currentThread->space;
     currentThread->Finish();
 }
@@ -62,8 +66,7 @@ ExceptionHandler(ExceptionType which)
         DEBUG('a', "Shutdown, initiated by user program.\n");
         interrupt->Halt();
     } else if ((which == SyscallException) && (type == SC_Exit)) {
-        DEBUG('a', "Exit system call initiated by user program with status %d.\n", machine->ReadRegister(4));
-        doExit();
+        doExit(machine->ReadRegister(4));
     } else {
         printf("Unexpected user mode exception %d %d\n", which, type);
         ASSERT(FALSE);
