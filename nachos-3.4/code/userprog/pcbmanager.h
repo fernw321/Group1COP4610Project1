@@ -12,14 +12,14 @@ class PCBManager {
 
         PCB* AllocatePCB();
         int DeallocatePCB(PCB* pcb);
+        PCB* GetPCB(int pid);
 
     private:
-        Bitmap* bitmap;
+        BitMap* bitmap;
         PCB** pcbs;
-
         // Need a lock here
         // Lock* pcbManagerLock;
-        
-}
+
+};
 
 #endif // PCBMANAGER_H

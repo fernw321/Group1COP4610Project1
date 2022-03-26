@@ -1,13 +1,12 @@
 #ifndef PCB_H
 #define PCB_H
 
-#include "thread.h"
-#include "bitmap.h"
 #include "list.h"
 
 class Thread;
 
 class PCB {
+
     public:
         PCB(int id);
         ~PCB();
@@ -15,10 +14,15 @@ class PCB {
         PCB* parent;
         List* children;
         Thread* thread;
+        int exitStatus;
 
-    private:
         void AddChild(PCB* pcb);
         int RemoveChild(PCB* pcb);
+        bool HasExited();
+        void DeleteExitedChildrenSetParentNull();
+
+    private:
+
 };
 
 #endif // PCB_H
