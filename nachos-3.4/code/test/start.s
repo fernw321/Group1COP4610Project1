@@ -129,6 +129,12 @@ Yield:
 	syscall
 	j	$31
 	.end Yield
+Kill:
+	addiu $2,$0,SC_Kill
+	syscall
+	j	$31
+	.end Kill
+	/* Only return once the the process has been killed.*/
 
 /* dummy function to keep gcc happy */
         .globl  __main
