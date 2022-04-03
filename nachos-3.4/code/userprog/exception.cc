@@ -24,6 +24,7 @@
 #include "copyright.h"
 #include "system.h"
 #include "syscall.h"
+#include "thread.h"
 
 //----------------------------------------------------------------------
 // ExceptionHandler
@@ -47,7 +48,6 @@
 //  "which" is the kind of exception.  The list of possible exceptions
 //  are in machine.h.
 //----------------------------------------------------------------------
-
 
 void doExit(int status) {
 
@@ -82,42 +82,49 @@ void incrementPC() {
 
 void childFunction(int pid) {
 
-    // // 1. Restore the state of registers
-    // // currentThread->RestoreUserState()
-    // currentThread->RestoreUserState();
+    // 1. Restore the state of registers
+    // currentThread->RestoreUserState()
+    currentThread->RestoreUserState();
 
-    // // 2. Restore the page table for child
-    // // currentThread->space->RestoreState()
-    // currentThread->space->RestoreState();
+    // 2. Restore the page table for child
+    // currentThread->space->RestoreState()
+    currentThread->space->RestoreState();
 
-    // PCReg == machine->ReadRegister(PCReg)
-    // // print message for child creation (pid,  PCReg, currentThread->space->GetNumPages())
-    // printf("Child created---\npid: %d\nPCReg: %d\nNum pages: %d\n", pid, PCReg, currentThread->space->GetNumPages());
+    PCReg == machine->ReadRegister(PCReg);
+    // print message for child creation (pid,  PCReg, currentThread->space->GetNumPages())
+    printf("Child created---\npid: %d\nPCReg: %d\nNum pages: %d\n", pid, PCReg, currentThread->space->GetNumPages());
 
-    // machine->Run();
+    machine->Run();
 
 }
 
 int doFork(int functionAddr) {
 
+    printf("FORK CYCLE\n");
     // 1. Check if sufficient memory exists to create new process
     // currentThread->space->GetNumPages() <= mm->GetFreePageCount()
     // if check fails, return -1
 
+    if (currentThread->space->GetNumPages() <= mm->GetFreePageCount()) {
+
+    } else {
+        return -1;
+    }
+
     // 2. SaveUserState for the parent thread
-    // currentThread->SaveUserState();
+    currentThread->SaveUserState();
 
     // 3. Create a new address space for child by copying parent address space
     // Parent: currentThread->space
-    // childAddrSpace: new AddrSpace(currentThread->space)
+    AddrSpace* childAddrSpace = new AddrSpace(currentThread->space);
 
     // 4. Create a new thread for the child and set its addrSpace
-    // childThread = new Thread("childThread")
-    // child->space = childAddSpace;
+    Thread* childThread = new Thread("childThread");
+    childThread->space = childAddrSpace;
 
     // 5. Create a PCB for the child and connect it all up
-    // pcb: pcbManager->AllocatePCB();
-    // pcb->thread = childThread
+    PCB* pcb = pcbManager->AllocatePCB();
+    pcb->thread = childThread;
     // set parent for child pcb
     // add child for parent pcb
 
@@ -127,13 +134,20 @@ int doFork(int functionAddr) {
     // NextPCReg: functionAddr+4
     // childThread->SaveUserState();
 
+    int childPCReg = machine->ReadRegister(4);
+    machine->WriteRegister(PCReg, childPCReg);
+    machine->WriteRegister(NextPCReg, childPCReg + 4);
+    machine->WriteRegister(PrevPCReg, childPCReg - 4);
+    childThread->SaveUserState();
+
     // 7. Call thread->fork on Child
-    // childThread->Fork(childFunction, pcb->pid)
+    childThread->Fork(childFunction, pcb->pid);
 
     // 8. Restore register state of parent user-level process
-    // currentThread->RestoreUserState()
+    currentThread->RestoreUserState();
 
-    // 9. return pcb->pid;
+    // 9. 
+    return pcb->pid;
 
 }
 
