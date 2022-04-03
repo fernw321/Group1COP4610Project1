@@ -89,6 +89,10 @@ AddrSpace::AddrSpace(OpenFile *executable)
         return;
     }
 
+    // Allocate a new PCB for the address space
+    pcb = pcbManager->AllocatePCB(currentThread);
+    pcb->thread = currentThread;
+
     DEBUG('a', "Initializing address space, num pages %d, size %d\n",
                     numPages, size);
 // first, set up the translation
@@ -102,17 +106,14 @@ AddrSpace::AddrSpace(OpenFile *executable)
         pageTable[i].readOnly = FALSE;  // if the code segment was entirely on
                         // a separate page, we could set its
                         // pages to be read-only
+
+        // Zero out each page, to zero the unitialized data segment
+        // and the stack segment
+        unsigned int physicalPageAddress = (pageTable[i].physicalPage)*128;
+        bzero(&(machine->mainMemory[physicalPageAddress]), 128);
     }
 
-// zero out the entire address space, to zero the unitialized data segment
-// and the stack segment
-    bzero(machine->mainMemory, size);
-    // Zero out each page, to zero the unitialized data segment
-    // and the stack segment
-    unsigned int physicalPageAddress = (pageTable[i].physicalPage)*128;
-    bzero(&(machine->mainMemory[physicalPageAddress]), 128);
-
-// then, copy in the code and data segments into memory
+    // then, copy in the code and data segments into memory
     if (noffH.code.size > 0) {
         DEBUG('a', "Initializing code segment, at 0x%x, size %d\n",
             noffH.code.virtualAddr, noffH.code.size);
