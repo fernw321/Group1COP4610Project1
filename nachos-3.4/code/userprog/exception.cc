@@ -82,19 +82,19 @@ void incrementPC() {
 
 void childFunction(int pid) {
 
-    // 1. Restore the state of registers
-    // currentThread->RestoreUserState()
-    currentThread->RestoreUserState();
+    // // 1. Restore the state of registers
+    // // currentThread->RestoreUserState()
+    // currentThread->RestoreUserState();
 
-    // 2. Restore the page table for child
-    // currentThread->space->RestoreState()
-    currentThread->space->RestoreState();
+    // // 2. Restore the page table for child
+    // // currentThread->space->RestoreState()
+    // currentThread->space->RestoreState();
 
-    PCReg == machine->ReadRegister(PCReg)
-    // print message for child creation (pid,  PCReg, currentThread->space->GetNumPages())
-    printf("Child created---\npid: %d\nPCReg: %d\nNum pages: %d\n", pid, PCReg, currentThread->space->GetNumPages());
+    // PCReg == machine->ReadRegister(PCReg)
+    // // print message for child creation (pid,  PCReg, currentThread->space->GetNumPages())
+    // printf("Child created---\npid: %d\nPCReg: %d\nNum pages: %d\n", pid, PCReg, currentThread->space->GetNumPages());
 
-    machine->Run();
+    // machine->Run();
 
 }
 
@@ -139,116 +139,116 @@ int doFork(int functionAddr) {
 
 int doExec(char* filename) {
 
-    // Use progtest.cc:StartProcess() as a guide
+    // // Use progtest.cc:StartProcess() as a guide
 
-    // 1. Open the file and check validity
-    OpenFile *executable = fileSystem->Open(filename);
-    AddrSpace *space;
+    // // 1. Open the file and check validity
+    // OpenFile *executable = fileSystem->Open(filename);
+    // AddrSpace *space;
 
-    if (executable == NULL) {
-        printf("Unable to open file %s\n", filename);
-        return -1;
-    }
+    // if (executable == NULL) {
+    //     printf("Unable to open file %s\n", filename);
+    //     return -1;
+    // }
 
-    // 2. Create new address space
-    space = new AddrSpace(executable);
+    // // 2. Create new address space
+    // space = new AddrSpace(executable);
 
-    // 3. Check if Addrspace creation was successful
-    if(space->valid != true) {
-    printf("Could not create AddrSpace\n");
-        return -1;
-    }
+    // // 3. Check if Addrspace creation was successful
+    // if(space->valid != true) {
+    // printf("Could not create AddrSpace\n");
+    //     return -1;
+    // }
 
-    // Steps 4 and 5 may not be necessary!!
+    // // Steps 4 and 5 may not be necessary!!
 
-    // 4. Create a new PCB for the new addrspace
-    // ?. Can you reuse existing pcb?
-    // PCB* pcb = pcbManager->AllocatePCB();
-    // Initialize parent
-    // pcb->parent = currentThread->space->pcb->parent;
-    // space->pcb = pcb;
+    // // 4. Create a new PCB for the new addrspace
+    // // ?. Can you reuse existing pcb?
+    // // PCB* pcb = pcbManager->AllocatePCB();
+    // // Initialize parent
+    // // pcb->parent = currentThread->space->pcb->parent;
+    // // space->pcb = pcb;
 
-    // 5. Set the thread for the new pcb
-    // pcb->thread = currentThread;
+    // // 5. Set the thread for the new pcb
+    // // pcb->thread = currentThread;
 
-    // 6. Delete current address space
-    delete currentThread->space;
+    // // 6. Delete current address space
+    // delete currentThread->space;
 
-    // 7. SEt the addrspace for currentThread
-    currentThread->space = space;
+    // // 7. SEt the addrspace for currentThread
+    // currentThread->space = space;
 
-    delete executable;            // close file
+    // delete executable;            // close file
 
-    // 9. Initialize registers for new addrspace
-    space->InitRegisters();     // set the initial register values
+    // // 9. Initialize registers for new addrspace
+    // space->InitRegisters();     // set the initial register values
 
-    // 10. Initialize the page table
-    space->RestoreState();       // load page table register
+    // // 10. Initialize the page table
+    // space->RestoreState();       // load page table register
 
-    // 11. Run the machine now that all is set up
-    machine->Run();          // jump to the user progam
-    ASSERT(FALSE); // Execution nevere reaches here
+    // // 11. Run the machine now that all is set up
+    // machine->Run();          // jump to the user progam
+    // ASSERT(FALSE); // Execution nevere reaches here
 
-    return 0;
+    // return 0;
 }
 
 
 int doJoin(int pid) {
 
-    // 1. Check if this is a valid pid and return -1 if not
-    PCB* joinPCB = pcbManager->GetPCB(pid);
-    if (joinPCB == NULL) return -1;
+    // // 1. Check if this is a valid pid and return -1 if not
+    // PCB* joinPCB = pcbManager->GetPCB(pid);
+    // if (joinPCB == NULL) return -1;
 
-    // 2. Check if pid is a child of current process
-    PCB* pcb = currentThread->space->pcb;
-    if (pcb != joinPCB->parent) return -1;
+    // // 2. Check if pid is a child of current process
+    // PCB* pcb = currentThread->space->pcb;
+    // if (pcb != joinPCB->parent) return -1;
 
-    // 3. Yield until joinPCB has not exited
-    while(!joinPCB->hasExited) currentThread->Yield();
+    // // 3. Yield until joinPCB has not exited
+    // while(!joinPCB->hasExited) currentThread->Yield();
 
-    // 4. Store status and delete joinPCB
-    int status = joinPCB->exitStatus;
-    delete joinPCB;
+    // // 4. Store status and delete joinPCB
+    // int status = joinPCB->exitStatus;
+    // delete joinPCB;
 
-    return status;
+    // return status;
 
 }
 
 int doKill (int pid) {
 
-    // 1. Check if the pid is valid and if not, return -1
-    PCB* pcb = pcbManager->GetPCB(pid);
-    if (pcb == NULL) return -1;
+    // // 1. Check if the pid is valid and if not, return -1
+    // PCB* pcb = pcbManager->GetPCB(pid);
+    // if (pcb == NULL) return -1;
 
-    // 2. IF pcb is self, then just exit the process
-    if (pcb == currentThread->space->pcb) {
-            doExit(0);
-            return 0;
-    }
-    // 3. Valid kill, pid exists and not self, do cleanup similar to Exit
-    // However, change references from currentThread to the target thread
-    // pcb->thread is the target thread
-    else
-    {
-        int pid = 99;
+    // // 2. IF pcb is self, then just exit the process
+    // if (pcb == currentThread->space->pcb) {
+    //         doExit(0);
+    //         return 0;
+    // }
+    // // 3. Valid kill, pid exists and not self, do cleanup similar to Exit
+    // // However, change references from currentThread to the target thread
+    // // pcb->thread is the target thread
+    // else
+    // {
+    //     int pid = 99;
 
-        printf("System Call: [%d] invoked [Exit]\n", pid);
-        printf ("Process [%d] exits with [%d]\n", pid, status);
+    //     printf("System Call: [%d] invoked [Exit]\n", pid);
+    //     printf ("Process [%d] exits with [%d]\n", pid, status);
 
-        delete pcb->space;
-        pcb->thread->Finish();
-        pcb->exitStatus = status;
+    //     delete pcb->space;
+    //     pcb->thread->Finish();
+    //     pcb->exitStatus = status;
 
-        // Delete exited children and set parent null for non-exited ones
-        pcb->DeleteExitedChildrenSetParentNull();
+    //     // Delete exited children and set parent null for non-exited ones
+    //     pcb->DeleteExitedChildrenSetParentNull();
 
-        // Manage PCB memory As a child process
-        if(pcb->parent == NULL) delete pcb;
+    //     // Manage PCB memory As a child process
+    //     if(pcb->parent == NULL) delete pcb;
     
-    }
+    // }
     
-    // 4. return 0 for success!
-    return 0;
+    // // 4. return 0 for success!
+    // return 0;
 
 }
 
@@ -301,8 +301,7 @@ ExceptionHandler(ExceptionType which)
     } else if ((which == SyscallException) && (type == SC_Yield)) {
         doYield();
         incrementPC();
-    } 
-    else {
+    } else {
     printf("Unexpected user mode exception %d %d\n", which, type);
     ASSERT(FALSE);
     }
