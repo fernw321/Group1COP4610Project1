@@ -93,7 +93,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
     pcb = pcbManager->AllocatePCB();
     pcb->thread = currentThread;
 
-    DEBUG('a', "Initializing address space, num pages %d, size %d\n",
+    print("Initializing address space, num pages %d, size %d\n",
                     numPages, size);
 // first, set up the translation
     pageTable = new TranslationEntry[numPages];
