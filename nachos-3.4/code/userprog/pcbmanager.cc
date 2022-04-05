@@ -25,12 +25,12 @@ PCBManager::~PCBManager() {
 PCB* PCBManager::AllocatePCB() {
 
     // Aquire pcbManagerLock
-    pcbManager->pcbManagerLock->Acquire();
+    // pcbManager->pcbManagerLock->Acquire();
 
     int pid = bitmap->Find();
 
     // Release pcbManagerLock
-    pcbManager->pcbManagerLock->Release();
+    // pcbManager->pcbManagerLock->Release();
 
     ASSERT(pid != -1);
 
@@ -49,13 +49,13 @@ int PCBManager::DeallocatePCB(PCB* pcb) {
         return -1;
 
      // Aquire pcbManagerLock
-    pcbManager->pcbManagerLock->Acquire();
+    // pcbManager->pcbManagerLock->Acquire();
 
 
     bitmap->Clear(pcb->pid);
 
     // Release pcbManagerLock
-    pcbManager->pcbManagerLock->Release();
+    // pcbManager->pcbManagerLock->Release();
 
 
     delete pcbs[pcb->pid];
