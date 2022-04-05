@@ -169,6 +169,7 @@ int doExec(char* filename) {
     }
 
     // 2. Create new address space
+    delete currentThread->space;
     space = new AddrSpace(executable);
 
     // 3. Check if Addrspace creation was successful
@@ -190,7 +191,7 @@ int doExec(char* filename) {
     // pcb->thread = currentThread;
 
     // 6. Delete current address space
-    delete currentThread->space;
+    
 
     // 7. SEt the addrspace for currentThread
     currentThread->space = space;
