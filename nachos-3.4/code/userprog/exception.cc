@@ -51,12 +51,12 @@
 
 void doExit(int status) {
 
-    int pid = 99;
+    int pid = currentThread->space->pcb->pid;
 
     printf("System Call: [%d] invoked [Exit]\n", pid);
     printf ("Process [%d] exits with [%d]\n", pid, status);
 
-    delete currentThread->space;
+    // delete currentThread->space;
     currentThread->Finish();
     currentThread->space->pcb->exitStatus = status;
 
@@ -69,6 +69,10 @@ void doExit(int status) {
     // Manage PCB memory As a child process
     if(pcb->parent == NULL) pcbManager->DeallocatePCB(pcb);
 
+    delete currentThread->space;
+    if (currentThread->space->GetPageTable() != NULL) {
+        printf("Space not deleted\n");
+    }
 }
 
 void incrementPC() {
@@ -100,14 +104,17 @@ void childFunction(int pid) {
 
 int doFork(int functionAddr) {
 
-    printf("FORK CYCLE\n");
+    int pid = currentThread->space->pcb->pid;
+    printf("System Call: [%d] invoked [Fork]\n", pid);
+
     // 1. Check if sufficient memory exists to create new process
     // currentThread->space->GetNumPages() <= mm->GetFreePageCount()
     // if check fails, return -1
 
     if (currentThread->space->GetNumPages() <= mm->GetFreePageCount()) {
-
+        
     } else {
+        printf("Not enough space!!!!\n");
         return -1;
     }
 
@@ -156,6 +163,9 @@ int doFork(int functionAddr) {
 }
 
 int doExec(char* filename) {
+
+    int pid = currentThread->space->pcb->pid;
+    printf("System Call: [%d] invoked [Exec]\n", pid);
 
     // Use progtest.cc:StartProcess() as a guide
 
@@ -214,6 +224,8 @@ int doExec(char* filename) {
 
 int doJoin(int pid) {
 
+    printf("System Call: [%d] invoked [Join]\n", pid);
+
     // 1. Check if this is a valid pid and return -1 if not
     PCB* joinPCB = pcbManager->GetPCB(pid);
     if (joinPCB == NULL) return -1;
@@ -234,6 +246,8 @@ int doJoin(int pid) {
 }
 
 int doKill (int pid) {
+
+    printf("System Call: [%d] invoked [Kill]\n", pid);
 
     // 1. Check if the pid is valid and if not, return -1
     PCB* pcb = pcbManager->GetPCB(pid);
@@ -273,6 +287,8 @@ int doKill (int pid) {
 
 
 void doYield() {
+    int pid = currentThread->space->pcb->pid;
+    printf("System Call: [%d] invoked [Yield]\n", pid);
     currentThread->Yield();
 }
 

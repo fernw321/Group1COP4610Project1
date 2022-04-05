@@ -149,7 +149,8 @@ AddrSpace::AddrSpace(AddrSpace* space) {
     valid = true;
 
     // 1. Find how big the source address space is
-    unsigned int n = space->GetNumPages();
+    numPages = space->GetNumPages();
+    unsigned int n = numPages;
 
     // Acquire mmLock
     mmLock->Acquire();
@@ -157,6 +158,10 @@ AddrSpace::AddrSpace(AddrSpace* space) {
     // 2. Check if there is enough free memory to make the copy. IF not, fail
     ASSERT(n <= mm->GetFreePageCount());
     // Change this to informiing caller that constructor failed using valid=false;
+
+    // Allocate a new PCB for the address space
+    pcb = pcbManager->AllocatePCB();
+    pcb->thread = currentThread;
 
     // 3. Create a new pagetable of same size as source addr space
     pageTable = new TranslationEntry[n];
