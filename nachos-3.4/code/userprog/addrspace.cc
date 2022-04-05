@@ -163,7 +163,7 @@ AddrSpace::AddrSpace(AddrSpace* space) {
     printf("Initializing address space, num pages %d\n", n);
     // 4. Make a copy of the PTEs but allocate new physical pages
     TranslationEntry* ppt = space->GetPageTable();
-    for (int i = 0; i < numPages; i++) {
+    for (int i = 0; i < n; i++) {
         pageTable[i].virtualPage = ppt[i].virtualPage;
         pageTable[i].physicalPage = mm->AllocatePage();
         pageTable[i].valid = ppt[i].valid;
