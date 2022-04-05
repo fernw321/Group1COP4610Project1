@@ -160,7 +160,7 @@ AddrSpace::AddrSpace(AddrSpace* space) {
 
     // 3. Create a new pagetable of same size as source addr space
     pageTable = new TranslationEntry[n];
-
+    printf("Initializing address space, num pages %d\n", n);
     // 4. Make a copy of the PTEs but allocate new physical pages
     TranslationEntry* ppt = space->GetPageTable();
     for (int i = 0; i < numPages; i++) {
@@ -179,7 +179,6 @@ AddrSpace::AddrSpace(AddrSpace* space) {
 
     // Release mmLock
     mmLock->Release();
-
 }
 
 
