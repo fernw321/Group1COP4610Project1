@@ -25,6 +25,7 @@
 #include "system.h"
 #include "syscall.h"
 #include "thread.h"
+// #include "synch.h"
 
 //----------------------------------------------------------------------
 // ExceptionHandler
@@ -49,6 +50,8 @@
 //  are in machine.h.
 //----------------------------------------------------------------------
 
+// Lock* pcbManagerLock = new Lock ("pcbManagerLock");
+
 void doExit(int status) {
 
     int pid = currentThread->space->pcb->pid;
@@ -59,6 +62,7 @@ void doExit(int status) {
     // delete currentThread->space;
     currentThread->Finish();
     currentThread->space->pcb->exitStatus = status;
+    delete currentThread->space;
 
     // Manage PCB memory As a parent process
     PCB* pcb = currentThread->space->pcb;
@@ -67,12 +71,9 @@ void doExit(int status) {
     pcb->DeleteExitedChildrenSetParentNull();
 
     // Manage PCB memory As a child process
+    // pcbManagerLock->Acquire();
     if(pcb->parent == NULL) pcbManager->DeallocatePCB(pcb);
-
-    delete currentThread->space;
-    if (currentThread->space->GetPageTable() != NULL) {
-        printf("Space not deleted\n");
-    }
+    // pcbManagerLock->Release();
 }
 
 void incrementPC() {
@@ -97,7 +98,6 @@ void childFunction(int pid) {
     PCReg == machine->ReadRegister(PCReg);
     // print message for child creation (pid,  PCReg, currentThread->space->GetNumPages())
     printf("Child created---\npid: %d\nPCReg: %d\nNum pages: %d\n", pid, PCReg, currentThread->space->GetNumPages());
-
     machine->Run();
 
 }
@@ -114,7 +114,7 @@ int doFork(int functionAddr) {
     if (currentThread->space->GetNumPages() <= mm->GetFreePageCount()) {
         
     } else {
-        printf("Not enough space!!!!\n");
+        printf("Not enough space!!!! for process: [%d]\n", pid);
         return -1;
     }
 
@@ -130,9 +130,12 @@ int doFork(int functionAddr) {
     childThread->space = childAddrSpace;
 
     // 5. Create a PCB for the child and connect it all up
+    // pcbManagerLock->Acquire();
     PCB* pcb = pcbManager->AllocatePCB();
+    // pcbManagerLock->Release();
     PCB* parentPcb = currentThread->space->pcb;
     pcb->thread = childThread;
+    childAddrSpace->pcb = pcb;
     // set parent for child pcb
     pcb->parent = parentPcb;
     // add child for parent pcb
