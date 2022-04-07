@@ -25,7 +25,7 @@
 #include "system.h"
 #include "syscall.h"
 #include "thread.h"
-// #include "synch.h"
+#include "synch.h"
 
 //----------------------------------------------------------------------
 // ExceptionHandler
@@ -50,7 +50,7 @@
 //  are in machine.h.
 //----------------------------------------------------------------------
 
-// Lock* pcbManagerLock = new Lock ("pcbManagerLock");
+Lock* pcbManagerLock = new Lock ("pcbManagerLock");
 
 void doExit(int status) {
 
@@ -59,21 +59,24 @@ void doExit(int status) {
     printf("System Call: [%d] invoked [Exit]\n", pid);
     printf ("Process [%d] exits with [%d]\n", pid, status);
 
-    // delete currentThread->space;
-    currentThread->Finish();
-    currentThread->space->pcb->exitStatus = status;
-    delete currentThread->space;
-
     // Manage PCB memory As a parent process
-    PCB* pcb = currentThread->space->pcb;
+    
 
     // Delete exited children and set parent null for non-exited ones
-    pcb->DeleteExitedChildrenSetParentNull();
-
+    
     // Manage PCB memory As a child process
-    // pcbManagerLock->Acquire();
+    pcbManagerLock->Acquire();
+    PCB* pcb = currentThread->space->pcb;
+    pcb->DeleteExitedChildrenSetParentNull();
+    
     if(pcb->parent == NULL) pcbManager->DeallocatePCB(pcb);
-    // pcbManagerLock->Release();
+    
+    currentThread->space->pcb->exitStatus = status;
+    mm->DeallocatePage(pid);
+    delete currentThread->space;
+    pcbManagerLock->Release();
+    
+    currentThread->Finish();
 }
 
 void incrementPC() {
@@ -130,9 +133,10 @@ int doFork(int functionAddr) {
     childThread->space = childAddrSpace;
 
     // 5. Create a PCB for the child and connect it all up
-    // pcbManagerLock->Acquire();
+    pcbManagerLock->Acquire();
     PCB* pcb = pcbManager->AllocatePCB();
-    // pcbManagerLock->Release();
+    pcbManagerLock->Release();
+    
     PCB* parentPcb = currentThread->space->pcb;
     pcb->thread = childThread;
     childAddrSpace->pcb = pcb;
