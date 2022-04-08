@@ -60,19 +60,21 @@ void doExit(int status) {
     printf ("Process [%d] exits with [%d]\n", pid, status);
 
     // Manage PCB memory As a parent process
-    
+    mm->DeallocatePage(pid);
+    PCB* pcb = currentThread->space->pcb;
+    pcb->DeleteExitedChildrenSetParentNull();
 
     // Delete exited children and set parent null for non-exited ones
     
     // Manage PCB memory As a child process
     pcbManagerLock->Acquire();
-    PCB* pcb = currentThread->space->pcb;
-    pcb->DeleteExitedChildrenSetParentNull();
+    
+
     
     if(pcb->parent == NULL) pcbManager->DeallocatePCB(pcb);
     
     currentThread->space->pcb->exitStatus = status;
-    mm->DeallocatePage(pid);
+    
     
     pcbManagerLock->Release();
 
@@ -100,7 +102,7 @@ void childFunction(int pid) {
     // currentThread->space->RestoreState()
     currentThread->space->RestoreState();
 
-    PCReg == machine->ReadRegister(PCReg);
+    PCReg = machine->ReadRegister(PCReg);
     // print message for child creation (pid,  PCReg, currentThread->space->GetNumPages())
     printf("Child created---\npid: %d\nPCReg: %d\nNum pages: %d\n", pid, PCReg, currentThread->space->GetNumPages());
     machine->Run();
