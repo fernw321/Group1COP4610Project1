@@ -60,29 +60,27 @@ void doExit(int status) {
     printf ("Process [%d] exits with [%d]\n", pid, status);
 
     // Manage PCB memory As a parent process
-    mm->DeallocatePage(pid);
     PCB* pcb = currentThread->space->pcb;
-    pcb->DeleteExitedChildrenSetParentNull();
+
 
     // Delete exited children and set parent null for non-exited ones
+    pcb->DeleteExitedChildrenSetParentNull();
     
+    
+
     // Manage PCB memory As a child process
     pcbManagerLock->Acquire();
     
-
-    
-    if(pcb->parent == NULL) pcbManager->DeallocatePCB(pcb);
+    mm->DeallocatePage(pcb->pid);
+    if(pcb->parent != NULL) pcbManager->DeallocatePCB(pcb);
     
     currentThread->space->pcb->exitStatus = status;
-    
-    
     pcbManagerLock->Release();
-
 
     delete currentThread->space;
     printf("what is happening?\n");
     if(currentThread->space != NULL) printf("freed space\n");
-    mm->DeallocatePage(pid);
+    
     currentThread->Finish();
 }
 
