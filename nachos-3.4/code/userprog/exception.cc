@@ -97,7 +97,6 @@ void doExit(int status) {
     pcbManagerLock->Release();
 
     delete currentThread->space;
-    printf("what is happening?\n");
     if(currentThread->space != NULL) printf("freed space\n");
     
     currentThread->Finish();
@@ -134,7 +133,7 @@ void childFunction(int pid) {
 }
 
 int doFork(int functionAddr) {
-
+    pcbManagerLock->Acquire();
     int pid = currentThread->space->pcb->pid;
     printf("System Call: [%d] invoked [Fork]\n", pid);
 
@@ -192,6 +191,7 @@ int doFork(int functionAddr) {
     // 8. Restore register state of parent user-level process
     currentThread->RestoreUserState();
 
+    pcbManagerLock->Release()
     // 9. 
     return pcb->pid;
 
