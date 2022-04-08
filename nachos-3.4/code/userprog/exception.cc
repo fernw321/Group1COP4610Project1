@@ -72,6 +72,21 @@ void doExit(int status) {
         
         pcb->parent->RemoveChild(pcb);
         //pcb->exitStatus = pcb->parent->pid;
+        int init = mm->GetFreePageCount();
+        //printf("free pages, init: %d\n", init);
+        for(int i = 0; i<(int)currentThread->space->GetNumPages(); i++)
+        {
+            int res2 = mm->DeallocatePage(i);
+            if(res2 == -1)
+            {
+                //printf("failed to Deallocate page...\n");
+            }
+            else{
+                //printf("page deallocated\n");
+                int res3 = mm->GetFreePageCount();
+                //printf("free pages, res: %d\n", res3);
+        }
+    }
     
     }
 
@@ -84,21 +99,7 @@ void doExit(int status) {
         //printf("pcb deallocated\n");
     }
 
-    int init = mm->GetFreePageCount();
-    printf("free pages, init: %d\n", init);
-    for(int i = 0; i<(int)currentThread->space->GetNumPages(); i++)
-    {
-        int res2 = mm->DeallocatePage(i);
-        if(res2 == -1)
-        {
-            //printf("failed to Deallocate page...\n");
-        }
-        else{
-            //printf("page deallocated\n");
-            int res3 = mm->GetFreePageCount();
-            //printf("free pages, res: %d\n", res3);
-        }
-    }
+    
     
     delete currentThread->space;
     //if(currentThread->space != NULL) printf("freed space\n");
