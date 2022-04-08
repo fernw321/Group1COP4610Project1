@@ -86,7 +86,7 @@ void doExit(int status) {
 
     int init = mm->GetFreePageCount();
     printf("free pages, init: %d\n", init);
-    for(int i = 0; i<currentThread->space->GetNumPages(); i++)
+    for(int i = 0; i<(int)currentThread->space->GetNumPages(); i++)
     {
         int res2 = mm->DeallocatePage(i);
         if(res2 == -1)
