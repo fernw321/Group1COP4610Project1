@@ -191,7 +191,7 @@ int doFork(int functionAddr) {
     // 8. Restore register state of parent user-level process
     currentThread->RestoreUserState();
 
-    pcbManagerLock->Release()
+    pcbManagerLock->Release();
     // 9. 
     return pcb->pid;
 
