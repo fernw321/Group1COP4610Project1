@@ -73,9 +73,11 @@ void doExit(int status) {
     
     currentThread->space->pcb->exitStatus = status;
     mm->DeallocatePage(pid);
-    delete currentThread->space;
-    pcbManagerLock->Release();
     
+    pcbManagerLock->Release();
+
+    delete currentThread->space;
+    if(currentThread->space == NULL) printf("freed space\n");
     currentThread->Finish();
 }
 
