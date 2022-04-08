@@ -71,7 +71,7 @@ void doExit(int status) {
     {
         
         pcb->parent->RemoveChild(pcb);
-        pcb->exitStatus = pcb->parent->pid;
+        //pcb->exitStatus = pcb->parent->pid;
     
     }
 
