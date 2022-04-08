@@ -79,9 +79,20 @@ void doExit(int status) {
     else{
         printf("page deallocated\n");
     }
+
+    if(pcb->parent != NULL)
+    {
+        int res = pcbManager->DeallocatePCB(pcb);
+        if(res == -1)
+        {
+            printf("failed to deallocate pcb\n");
+        }
+        else{
+            printf("pcb deallocated\n");
+        }
     
-    if(pcb->parent != NULL) pcbManager->DeallocatePCB(pcb);
-    
+    }
+
     currentThread->space->pcb->exitStatus = status;
     pcbManagerLock->Release();
 
