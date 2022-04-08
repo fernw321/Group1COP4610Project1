@@ -3,11 +3,8 @@
 
 #include "bitmap.h"
 #include "pcb.h"
-#include "../threads/synch.h"
-#include "copyright.h"
 
 class PCB;
-class Lock;
 
 class PCBManager {
 

@@ -1,4 +1,5 @@
 #include "pcbmanager.h"
+#include "synch.h"
 
 Lock* pcbManagerLock = new Lock ("pcbManagerLock");
 
