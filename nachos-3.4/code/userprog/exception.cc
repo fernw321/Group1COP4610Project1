@@ -88,15 +88,15 @@ void doExit(int status) {
     printf("free pages, init: %d\n", init);
     for(int i = 0; i<currentThread->space->GetNumPages(); i++)
     {
-        int res2 = mm->DeallocatePage(pcb->pid);
+        int res2 = mm->DeallocatePage(i);
         if(res2 == -1)
         {
             printf("failed to Deallocate page...\n");
         }
         else{
             printf("page deallocated\n");
-            int res = mm->GetFreePageCount();
-            printf("free pages, res: %d\n", res);
+            int res3 = mm->GetFreePageCount();
+            printf("free pages, res: %d\n", res3);
         }
     }
     
