@@ -102,7 +102,9 @@ void childFunction(int pid) {
     // currentThread->space->RestoreState()
     currentThread->space->RestoreState();
 
-    PCReg = machine->ReadRegister(PCReg);
+    int p = PCReg;
+    p = machine->ReadRegister(p);
+    PCReg = p;
     // print message for child creation (pid,  PCReg, currentThread->space->GetNumPages())
     printf("Child created---\npid: %d\nPCReg: %d\nNum pages: %d\n", pid, PCReg, currentThread->space->GetNumPages());
     machine->Run();
