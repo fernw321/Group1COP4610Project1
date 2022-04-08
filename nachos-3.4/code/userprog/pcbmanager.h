@@ -3,6 +3,8 @@
 
 #include "bitmap.h"
 #include "pcb.h"
+#include "synch.h"
+#include "copyright.h"
 
 class PCB;
 
@@ -20,7 +22,7 @@ class PCBManager {
         BitMap* bitmap;
         PCB** pcbs;
         // Need a lock here
-        // Lock* pcbManagerLock;
+        Lock* pcbManagerLock;
 
 };
 
