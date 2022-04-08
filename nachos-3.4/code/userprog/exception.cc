@@ -24,6 +24,8 @@
 #include "copyright.h"
 #include "system.h"
 #include "syscall.h"
+#include "thread.h"
+#include "synch.h"
 
 //----------------------------------------------------------------------
 // ExceptionHandler
