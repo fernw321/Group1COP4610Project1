@@ -81,7 +81,8 @@ void doExit(int status) {
 
     delete currentThread->space;
     printf("what is happening?\n");
-    if(currentThread->space == NULL) printf("freed space\n");
+    if(currentThread->space != NULL) printf("freed space\n");
+    mm->DeallocatePage(pid);
     currentThread->Finish();
 }
 
