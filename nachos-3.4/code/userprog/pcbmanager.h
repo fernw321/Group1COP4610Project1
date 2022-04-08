@@ -7,6 +7,7 @@
 #include "copyright.h"
 
 class PCB;
+class Lock;
 
 class PCBManager {
 

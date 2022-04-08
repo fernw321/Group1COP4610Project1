@@ -50,7 +50,7 @@
 //  are in machine.h.
 //----------------------------------------------------------------------
 
-Lock* pcbManagerLock = new Lock ("pcbManagerLock");
+//
 
 void doExit(int status) {
 
