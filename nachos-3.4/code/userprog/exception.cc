@@ -86,8 +86,8 @@ void doExit(int status) {
 
     int init = mm->GetFreePageCount();
     printf("free pages, init: %d\n", init);
-    int res = mm->DeallocatePage(pcb->pid);
-    if(res == -1)
+    int res2 = mm->DeallocatePage(pcb->pid);
+    if(res2 == -1)
     {
         printf("failed to Deallocate page...\n");
     }
