@@ -17,8 +17,6 @@ void fast_exit(){
 
 int main()
 {
-
-	printf("Cant get this to work!\n");
 	int i=0;
 	SpaceId pid1,pid2,pid3;
 	
