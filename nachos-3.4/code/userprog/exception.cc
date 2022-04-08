@@ -64,37 +64,36 @@ void doExit(int status) {
 
 
     // Delete exited children and set parent null for non-exited ones
-    // Manage PCB memory As a child process
-    pcbManagerLock->Acquire();
-
-    pcb->DeleteExitedChildrenSetParentNull();
-    int res = mm->DeallocatePage(pcb->pid);
-    if(res == -1)
-    {
-        printf("failed to Deallocate page...\n");
-    }
-    else{
-        printf("page deallocated\n");
-    }
+    // Manage PCB memory As a child process    
 
     if(pcb->parent != NULL)
     {
-        int init = mm->GetFreePageCount();
-        printf("free pages: %d\n", init);
-        int res = pcbManager->DeallocatePCB(pcb);
+        pcb->DeleteExitedChildrenSetParentNull();
+        int res = mm->DeallocatePage(pcb->pid);
         if(res == -1)
         {
-            printf("failed to deallocate pcb\n");
+            printf("failed to Deallocate page...\n");
         }
         else{
-            printf("pcb deallocated\n");
-            int res = mm->GetFreePageCount();
-            printf("free pages: %d\n", res);
-        }
+            printf("page deallocated\n");
+        }   
+        currentThread->space->pcb->exitStatus = status; 
     
     }
 
-    currentThread->space->pcb->exitStatus = status;
+    int init = mm->GetFreePageCount();
+    printf("free pages, init: %d\n", init);
+    int res = pcbManager->DeallocatePCB(pcb);
+    if(res == -1)
+    {
+        printf("failed to deallocate pcb\n");
+    }
+    else{
+        printf("pcb deallocated\n");
+        int res = mm->GetFreePageCount();
+        printf("free pages, res: %d\n", res);
+    }
+
     pcbManagerLock->Release();
 
     delete currentThread->space;
