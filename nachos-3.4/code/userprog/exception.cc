@@ -71,7 +71,15 @@ void doExit(int status) {
     // Manage PCB memory As a child process
     pcbManagerLock->Acquire();
     
-    mm->DeallocatePage(pcb->pid);
+    int res = mm->DeallocatePage(pcb->pid);
+    if(res == -1)
+    {
+        printf("failed to Deallocate page...\n");
+    }
+    else{
+        printf("page deallocated\n");
+    }
+    
     if(pcb->parent != NULL) pcbManager->DeallocatePCB(pcb);
     
     currentThread->space->pcb->exitStatus = status;
