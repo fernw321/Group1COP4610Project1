@@ -1,8 +1,4 @@
 #include "pcbmanager.h"
-#include "synch.h"
-#include "thread.h"
-
-Lock* pcbManagerLock = new Lock ("pcbManagerLock");
 
 PCBManager::PCBManager(int maxProcesses) {
 

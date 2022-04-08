@@ -50,7 +50,7 @@
 //  are in machine.h.
 //----------------------------------------------------------------------
 
-//
+Lock* pcbManagerLock = new Lock ("pcbManagerLock");
 
 void doExit(int status) {
 
@@ -78,7 +78,9 @@ void doExit(int status) {
     
     pcbManagerLock->Release();
 
+
     delete currentThread->space;
+    printf("what is happening?\n");
     if(currentThread->space == NULL) printf("freed space\n");
     currentThread->Finish();
 }
