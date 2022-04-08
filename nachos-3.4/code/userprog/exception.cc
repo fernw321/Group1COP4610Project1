@@ -78,10 +78,10 @@ void doExit(int status) {
     int res = pcbManager->DeallocatePCB(pcb);
     if(res == -1)
     {
-        printf("failed to deallocate pcb\n");
+        //printf("failed to deallocate pcb\n");
     }
     else{
-        printf("pcb deallocated\n");
+        //printf("pcb deallocated\n");
     }
 
     int init = mm->GetFreePageCount();
@@ -91,17 +91,17 @@ void doExit(int status) {
         int res2 = mm->DeallocatePage(i);
         if(res2 == -1)
         {
-            printf("failed to Deallocate page...\n");
+            //printf("failed to Deallocate page...\n");
         }
         else{
-            printf("page deallocated\n");
+            //printf("page deallocated\n");
             int res3 = mm->GetFreePageCount();
-            printf("free pages, res: %d\n", res3);
+            //printf("free pages, res: %d\n", res3);
         }
     }
     
     delete currentThread->space;
-    if(currentThread->space != NULL) printf("freed space\n");
+    //if(currentThread->space != NULL) printf("freed space\n");
     
     currentThread->Finish();
 }
