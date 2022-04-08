@@ -93,10 +93,10 @@ void doExit(int status) {
     int res = pcbManager->DeallocatePCB(pcb);
     if(res == -1)
     {
-        //printf("failed to deallocate pcb\n");
+        printf("failed to deallocate pcb\n");
     }
     else{
-        //printf("pcb deallocated\n");
+        printf("pcb deallocated\n");
     }
 
     

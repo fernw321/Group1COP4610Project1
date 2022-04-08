@@ -125,13 +125,10 @@ Fork:
 	.globl Yield
 	.ent	Yield
 Yield:
-	addiu $2,$0,SC_Yield
-	syscall
-	j	$31
-	.end Yield
-
-        .globl Kill
-        .ent Kill
+		addiu $2,$0,SC_Yield
+		syscall
+		j	$31
+		.end Yield
 Kill:
         addiu $2,$0,SC_Kill
         syscall
