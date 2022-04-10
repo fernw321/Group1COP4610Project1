@@ -202,7 +202,7 @@ int doFork(int functionAddr) {
 }
 
 int doExec(char* filename) {
-    printf("filename is: %s!!!!\n", filename)
+    printf("filename is: %s!!!!\n", filename);
     int pid = currentThread->space->pcb->pid;
     printf("System Call: [%d] invoked [Exec]\n", pid);
 
