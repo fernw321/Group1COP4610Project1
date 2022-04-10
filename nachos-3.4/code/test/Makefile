@@ -48,23 +48,23 @@ fork: fork.o start.o
 	$(LD) $(LDFLAGS) start.o fork.o -o fork.coff
 	../bin/coff2noff fork.coff fork 
 
-# join.o: join.c
-# 	$(CC) $(CFLAGS) join.c
-# join:   join.o start.o
-# 	$(LD) $(LDFLAGS) start.o join.o -o join.coff
-# 	../bin/coff2noff join.coff join 
+join.o: join.c
+	$(CC) $(CFLAGS) join.c
+join:   join.o start.o
+	$(LD) $(LDFLAGS) start.o join.o -o join.coff
+	../bin/coff2noff join.coff join 
 
-# kill.o: kill.c
-# 	$(CC) $(CFLAGS) kill.c
-# kill:   kill.o start.o
-# 	$(LD) $(LDFLAGS) start.o kill.o -o kill.coff
-# 	../bin/coff2noff kill.coff kill 
+kill.o: kill.c
+	$(CC) $(CFLAGS) kill.c
+kill:   kill.o start.o
+	$(LD) $(LDFLAGS) start.o kill.o -o kill.coff
+	../bin/coff2noff kill.coff kill 
 
-# exec.o: exec.c
-# 	$(CC) $(CFLAGS) exec.c
-# exec: exec.o start.o
-# 	$(LD) $(LDFLAGS) start.o exec.o -o exec.coff
-# 	../bin/coff2noff exec.coff exec 
+exec.o: exec.c
+	$(CC) $(CFLAGS) exec.c
+exec: exec.o start.o
+	$(LD) $(LDFLAGS) start.o exec.o -o exec.coff
+	../bin/coff2noff exec.coff exec 
 
 halt.o: halt.c
 	$(CC) $(CFLAGS) -c halt.c
