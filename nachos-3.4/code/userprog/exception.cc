@@ -71,7 +71,7 @@ void doExit(int status) {
     {
         
         pcb->parent->RemoveChild(pcb);
-        //pcb->exitStatus = pcb->parent->pid;
+        //cd pcb->exitStatus = pcb->parent->pid;
         int init = mm->GetFreePageCount();
         //printf("free pages, init: %d\n", init);
         for(int i = 0; i<(int)currentThread->space->GetNumPages(); i++)
@@ -202,7 +202,7 @@ int doFork(int functionAddr) {
 }
 
 int doExec(char* filename) {
-
+    printf("filename is: %s!!!!\n", filename)
     int pid = currentThread->space->pcb->pid;
     printf("System Call: [%d] invoked [Exec]\n", pid);
 
